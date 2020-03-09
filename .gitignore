@@ -127,3 +127,17 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Mac
+.DS_Store
+
+# Zipped sounds
+.tar.gz
+.tar.gz.md5
+.tar.gz.sha1
+.tar.gz.sha256
+
+# Lower bitrates
+8000/
+16000/
+32000/
