@@ -132,10 +132,10 @@ dmypy.json
 .DS_Store
 
 # Zipped sounds
-.tar.gz
-.tar.gz.md5
-.tar.gz.sha1
-.tar.gz.sha256
+*.tar.gz
+*.tar.gz.md5
+*.tar.gz.sha1
+*.tar.gz.sha256
 
 # Lower bitrates
 8000/
