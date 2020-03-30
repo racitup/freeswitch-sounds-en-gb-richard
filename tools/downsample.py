@@ -3,8 +3,8 @@
 
 """
 Uses Audacity to downsample Freeswitch sound files to the various rates required.
-Takes a folder path as input and expects files the form:  .../lang/country/voice/app/rate/file.wav.
-Outputs 8kHz, 16kHz and 32kHz versions in:                ./newrate/lang/country/voice/app/newrate/file.wav.
+Takes a directory as input and expects files in the form:  .../lang/country/voice/app/rate/file.wav.
+Outputs 8kHz, 16kHz and 32kHz versions in the current working dir: ./newrate/lang/country/voice/app/newrate/file.wav.
 Quits if a file exists.
 Make sure Audacity is running first and that mod-script-pipe is enabled in preferences before running this script.
 """
@@ -131,13 +131,18 @@ def downsample(client, path, newrate):
     "Main downsample loop"
     for wav in get_wavs(path):
         newwav = newpath(wav, newrate)
+        cutoff = (newrate * 7) / 16
         script = [
-            "Import2: Filename={}".format(wav), # Open, full file path required
-            "SelectAll:", # Select All
-            "Low-passFilter: frequency={} rolloff=dB48".format((newrate * 7) / 16), # Lowpass filter @ max attenuation rolloff
-            "SetProject: Rate={}".format(newrate), # Resample to newrate
-            "Export2: Filename={} NumChannels=1".format(newwav), # Export to wav, full file path required
-            "TrackClose:" # Close file
+            'Import2: Filename="{}"'.format(wav), # Open, full file path required
+            'SelectAll:', # Select All
+            'Low-passFilter: frequency={} rolloff=dB48'.format(cutoff), # Lowpass filter @ max attenuation rolloff, repeat x5
+            'Low-passFilter: frequency={} rolloff=dB48'.format(cutoff),
+            'Low-passFilter: frequency={} rolloff=dB48'.format(cutoff),
+            'Low-passFilter: frequency={} rolloff=dB48'.format(cutoff),
+            'Low-passFilter: frequency={} rolloff=dB48'.format(cutoff),
+            'SetProject: Rate={}'.format(newrate), # Resample to newrate
+            'Export2: Filename="{}" NumChannels=1'.format(newwav), # Export to wav, full file path required
+            'TrackClose:' # Close file
         ]
         client.run_script(script)
         #break
@@ -171,17 +176,17 @@ def play(client):
     for track in info:
         end = max(end, track["end"])
     length = end - 0
-    client.run_script(["CursProjectStart:", "PlayStop:"])
+    client.run_script(['CursProjectStart:', 'PlayStop:'])
     sleep(length)
 
 def test(client, args):
     """Test script"""
     for wav in get_wavs(args.sounds):
-        client.single_command("Import2: Filename={}".format(wav))
+        client.single_command('Import2: Filename="{}"'.format(wav))
         play(client)
-        client.run_script(["SelectAll:", "Low-passFilter: frequency=3500 rolloff=dB48"])
+        client.run_script(['SelectAll:', 'Low-passFilter: frequency=3500 rolloff=dB48'])
         play(client)
-        client.single_command("TrackClose:")
+        client.single_command('TrackClose:')
         break
     sys.exit()
 
