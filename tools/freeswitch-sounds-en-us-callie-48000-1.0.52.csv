@@ -1151,7 +1151,7 @@ filepath,transcription,is in en-CA
 /en/us/callie/voicemail/48000/vm-message_alt.wav,message,False
 /en/us/callie/voicemail/48000/vm-message_envelope.wav,to hear the message envelope,False
 /en/us/callie/voicemail/48000/vm-message_forwarded.wav,message forwarding,False
-/en/us/callie/voicemail/48000/vm-message_from.wav,message from,False
+/en/us/callie/voicemail/48000/vm-message_from.wav,message from,Should
 /en/us/callie/voicemail/48000/vm-message_number.wav,message number,True
 /en/us/callie/voicemail/48000/vm-messages.wav,messages,True
 /en/us/callie/voicemail/48000/vm-messages_alt.wav,messages,False
