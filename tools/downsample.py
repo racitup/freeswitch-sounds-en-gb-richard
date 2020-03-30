@@ -5,7 +5,7 @@
 Uses Audacity to downsample Freeswitch sound files to the various rates required.
 Takes a directory as input and expects files in the form:  .../lang/country/voice/app/rate/file.wav.
 Outputs 8kHz, 16kHz and 32kHz versions in the current working dir: ./newrate/lang/country/voice/app/newrate/file.wav.
-Quits if a file exists.
+Skips existing files.
 Make sure Audacity is running first and that mod-script-pipe is enabled in preferences before running this script.
 """
 
@@ -130,7 +130,11 @@ def newpath(wav, newrate):
 def downsample(client, path, newrate):
     "Main downsample loop"
     for wav in get_wavs(path):
-        newwav = newpath(wav, newrate)
+        try:
+            newwav = newpath(wav, newrate)
+        except OSError as e:
+            print(e)
+            continue
         cutoff = (newrate * 7) / 16
         script = [
             'Import2: Filename="{}"'.format(wav), # Open, full file path required
